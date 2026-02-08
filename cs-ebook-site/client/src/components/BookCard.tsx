@@ -12,73 +12,66 @@ interface BookCardProps {
   bookCoverUrl?: string;
 }
 
-// 获取书籍图片路径 - 使用 GitHub 原始链接作为 CDN 源
-function getBookImagePath(category: string, subcategory: string, title: string): string {
-  // 映射分类到中文名称
+// 获取书籍图片路径 - 使用本地 public 目录下的图片
+function getBookImagePath(
+  category: string,
+  subcategory: string,
+  title: string
+): string {
+  // 映射分类到中文名称（与 images/ 目录结构匹配）
   const categoryMap: Record<string, string> = {
-    "ai": "人工智能",
-    "prog": "编程语言",
-    "fund": "计算机基础",
-    "bd": "大数据处理",
-    "math": "数学基础",
-    "soft": "软件工程",
-    "app": "应用技术/数字媒体技术",
-    "guide": "晋级指南",
+    ai: "人工智能",
+    programming: "编程语言",
+    fundamentals: "计算机基础",
+    bigdata: "大数据处理",
+    math: "数学基础",
   };
 
+  // 映射子分类到中文名称
   const subcategoryMap: Record<string, Record<string, string>> = {
-    "ai": {
+    ai: {
       "ai-cv": "图像处理",
       "ai-rl": "强化学习",
       "ai-ml": "机器学习",
       "ai-dl": "深度学习",
       "ai-nlp": "自然语言处理",
     },
-    "prog": {
+    programming: {
       "prog-python": "Python",
       "prog-java": "Java",
       "prog-js": "JavaScript",
-      "prog-cpp": "C++",
+      "prog-cpp": "Cpp",
       "prog-go": "Go",
       "prog-rust": "Rust",
     },
-    "fund": {
+    fundamentals: {
       "fund-os": "操作系统",
       "fund-algo": "算法与数据结构",
       "fund-network": "计算机网络",
     },
-    "bd": {
+    bigdata: {
       "bd-analysis": "数据分析",
       "bd-mining": "数据挖掘",
     },
-    "math": {
+    math: {
       "math-applied": "应用数学",
       "math-advanced": "高等数学",
     },
-    "soft": {
-      "soft-arch": "软件架构",
-      "soft-eng": "软件工程",
-    },
-    "app": {
-      "app-media": "数字媒体技术",
-    },
-    "guide": {
-      "guide-survival": "生存指南",
-      "guide-exam": "软考",
-      "guide-interview": "面试",
-    },
+  };
+
+  // 清理书名中的特殊字符，转换为文件名格式
+  const normalizeTitle = (title: string): string => {
+    return title
+      .toLowerCase() // 转换为小写
+      .trim();
   };
 
   const catName = categoryMap[category] || category;
   const subCatMap = subcategoryMap[category] || {};
   const subCatName = subCatMap[subcategory] || subcategory;
+  const normalizedTitle = normalizeTitle(title);
 
-  // 使用 GitHub 原始链接作为 CDN 源
-  const encodedCatName = encodeURIComponent(catName);
-  const encodedSubCatName = encodeURIComponent(subCatName);
-  const encodedTitle = encodeURIComponent(title);
-  
-  return `https://raw.githubusercontent.com/HiMenma/CS-Ebook/main/images/${encodedCatName}/${encodedSubCatName}/${encodedTitle}.jpg`;
+  return `/images/${catName}/${subCatName}/${normalizedTitle}.jpg`;
 }
 
 // 生成 Z-Library 搜索链接
@@ -90,14 +83,20 @@ function getZLibraryLink(title: string): string {
 export function BookCard({ book, bookCoverUrl }: BookCardProps) {
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  
+
   // 使用本地图片路径
-  const imagePath = getBookImagePath(book.category, book.subcategory, book.title);
+  const imagePath = getBookImagePath(
+    book.category,
+    book.subcategory,
+    book.title
+  );
   const zLibraryUrl = getZLibraryLink(book.title);
 
   // 生成基于书籍标题的渐变背景色
   const generateGradient = (title: string) => {
-    const hash = title.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = title
+      .split("")
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const colors = [
       "from-green-500 to-emerald-600",
       "from-cyan-500 to-blue-600",
@@ -109,7 +108,7 @@ export function BookCard({ book, bookCoverUrl }: BookCardProps) {
   };
 
   return (
-    <a 
+    <a
       href={zLibraryUrl}
       target="_blank"
       rel="noopener noreferrer"
@@ -140,7 +139,9 @@ export function BookCard({ book, bookCoverUrl }: BookCardProps) {
           </>
         ) : (
           /* 图片加载失败时的占位符 */
-          <div className={`w-full h-full bg-gradient-to-br ${generateGradient(book.title)} flex items-center justify-center`}>
+          <div
+            className={`w-full h-full bg-gradient-to-br ${generateGradient(book.title)} flex items-center justify-center`}
+          >
             <div className="text-center">
               <BookOpen className="w-12 h-12 text-white mx-auto mb-2 opacity-80" />
               <p className="text-xs text-white/70 px-2">{book.title}</p>
@@ -161,7 +162,9 @@ export function BookCard({ book, bookCoverUrl }: BookCardProps) {
         <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-accent transition-colors duration-200 leading-tight">
           {book.title}
         </h3>
-        <p className="text-xs text-muted-foreground truncate">{book.subcategory}</p>
+        <p className="text-xs text-muted-foreground truncate">
+          {book.subcategory}
+        </p>
       </div>
     </a>
   );
