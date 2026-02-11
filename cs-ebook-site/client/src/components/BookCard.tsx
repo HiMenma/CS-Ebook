@@ -61,9 +61,7 @@ function getBookImagePath(
 
   // 清理书名中的特殊字符，转换为文件名格式
   const normalizeTitle = (title: string): string => {
-    return title
-      .toLowerCase() // 转换为小写
-      .trim();
+    return title.trim();
   };
 
   const catName = categoryMap[category] || category;

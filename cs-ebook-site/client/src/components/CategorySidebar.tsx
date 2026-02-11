@@ -26,7 +26,7 @@ export function CategorySidebar({
   return (
     <div className="w-64 bg-card border-r border-border overflow-y-auto">
       <div className="p-4 space-y-2">
-        {booksData.map((category) => (
+        {booksData.map(category => (
           <div key={category.id}>
             <button
               onClick={() => onCategorySelect(category.id)}
@@ -47,10 +47,12 @@ export function CategorySidebar({
             {/* Subcategories */}
             {expandedCategories.has(category.id) && (
               <div className="ml-4 mt-1 space-y-1 border-l border-border pl-2">
-                {category.subcategories.map((subcategory) => (
+                {category.subcategories.map(subcategory => (
                   <button
                     key={subcategory.id}
-                    onClick={() => onSubcategorySelect(category.id, subcategory.id)}
+                    onClick={() =>
+                      onSubcategorySelect(category.id, subcategory.id)
+                    }
                     className={`w-full text-left px-3 py-1.5 rounded text-sm transition-all duration-200 ${
                       selectedSubcategory === subcategory.id &&
                       selectedCategory === category.id

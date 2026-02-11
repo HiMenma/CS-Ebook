@@ -11,9 +11,13 @@ import { SearchBar } from "@/components/SearchBar";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
+    new Set()
+  );
 
   // 搜索结果
   const filteredBooks = useMemo(() => {
@@ -22,18 +26,20 @@ export default function Home() {
     }
 
     if (selectedCategory && selectedSubcategory) {
-      const category = booksData.find((c) => c.id === selectedCategory);
+      const category = booksData.find(c => c.id === selectedCategory);
       if (category) {
-        const subcategory = category.subcategories.find((s) => s.id === selectedSubcategory);
+        const subcategory = category.subcategories.find(
+          s => s.id === selectedSubcategory
+        );
         return subcategory?.books || [];
       }
     }
 
     if (selectedCategory) {
-      const category = booksData.find((c) => c.id === selectedCategory);
+      const category = booksData.find(c => c.id === selectedCategory);
       if (category) {
         const books: any[] = [];
-        category.subcategories.forEach((sub) => {
+        category.subcategories.forEach(sub => {
           books.push(...sub.books);
         });
         return books;
@@ -61,9 +67,14 @@ export default function Home() {
     }
   };
 
-  const handleSubcategorySelect = (categoryId: string, subcategoryId: string) => {
+  const handleSubcategorySelect = (
+    categoryId: string,
+    subcategoryId: string
+  ) => {
     setSelectedCategory(categoryId);
-    setSelectedSubcategory(selectedSubcategory === subcategoryId ? null : subcategoryId);
+    setSelectedSubcategory(
+      selectedSubcategory === subcategoryId ? null : subcategoryId
+    );
   };
 
   return (
@@ -76,8 +87,12 @@ export default function Home() {
         }}
       >
         <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
-          <h1 className="text-5xl font-bold mb-4 gradient-text">CS-Ebook Explorer</h1>
-          <p className="text-xl text-muted-foreground">高质量计算机科学书籍推荐库</p>
+          <h1 className="text-5xl font-bold mb-4 gradient-text">
+            CS-Ebook Explorer
+          </h1>
+          <p className="text-xl text-muted-foreground">
+            高质量计算机科学书籍推荐库
+          </p>
         </div>
       </div>
 
@@ -97,7 +112,7 @@ export default function Home() {
           {/* Search Bar */}
           <SearchBar
             value={searchQuery}
-            onChange={(value) => {
+            onChange={value => {
               setSearchQuery(value);
               setSelectedCategory(null);
               setSelectedSubcategory(null);
@@ -108,15 +123,19 @@ export default function Home() {
           <div className="flex-1 overflow-y-auto p-6">
             {filteredBooks.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 auto-rows-max">
-                {filteredBooks.map((book) => (
+                {filteredBooks.map(book => (
                   <BookCard key={book.id} book={book} />
                 ))}
               </div>
             ) : (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                  <p className="text-muted-foreground text-lg">未找到相关书籍</p>
-                  <p className="text-muted-foreground text-sm mt-2">尝试修改搜索条件</p>
+                  <p className="text-muted-foreground text-lg">
+                    未找到相关书籍
+                  </p>
+                  <p className="text-muted-foreground text-sm mt-2">
+                    尝试修改搜索条件
+                  </p>
                 </div>
               </div>
             )}
@@ -141,7 +160,9 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div>
               <p className="text-accent font-semibold mb-1">📚 书籍数量</p>
-              <p className="text-muted-foreground">{getAllBooks().length}+ 本精选书籍</p>
+              <p className="text-muted-foreground">
+                {getAllBooks().length}+ 本精选书籍
+              </p>
             </div>
             <div>
               <p className="text-accent font-semibold mb-1">🎯 覆盖领域</p>

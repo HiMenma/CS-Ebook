@@ -13,17 +13,24 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export function SearchBar({ value, onChange, placeholder = "搜索书籍名称、作者或分类..." }: SearchBarProps) {
+export function SearchBar({
+  value,
+  onChange,
+  placeholder = "搜索书籍名称、作者或分类...",
+}: SearchBarProps) {
   return (
     <div className="border-b border-border p-6 bg-card">
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+            size={20}
+          />
           <Input
             type="text"
             placeholder={placeholder}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={e => onChange(e.target.value)}
             className="pl-10 pr-10 bg-input border-border text-foreground placeholder-muted-foreground focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all duration-200"
           />
           {value && (
